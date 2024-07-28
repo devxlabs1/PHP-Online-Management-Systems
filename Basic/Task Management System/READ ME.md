@@ -1,7 +1,3 @@
-Sure, Koder! Here is a step-by-step guide for setting up the task management system, including creating the database and importing the necessary files.
-
----
-
 # Task Management System Setup Guide
 
 Welcome to the setup guide for the Task Management System! Follow the steps below to set up your environment, create the necessary database, and run the application.
