@@ -44,153 +44,120 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 <head>
     <title>Task Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
             background-color: #f9f9f9;
         }
-        h1 {
-            color: #333;
+        .container {
+            margin-top: 50px;
         }
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
         }
-        a {
-            text-decoration: none;
-            color: #6200EA;
+        .add-btn {
+            font-size: 24px;
+            background-color: #6200EA;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
-        a:hover {
-            text-decoration: underline;
+        .add-btn:hover {
+            background-color: #4e00b0;
         }
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
             background-color: #fff;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
         th {
             background-color: #6200EA;
             color: #fff;
         }
-        tr:nth-child(even) {
-            background-color: #f4f4f4;
-        }
-        form {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        input[type="text"], select {
-            padding: 10px;
-            margin-right: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button, .btn {
-            padding: 10px 20px;
-            background-color: #6200EA;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #4e00b0;
-        }
-        .btn-edit, .btn-delete {
-            padding: 6px 12px;
-            border-radius: 4px;
-            color: #fff;
-            cursor: pointer;
-        }
         .btn-edit {
             background-color: #FFA726;
-        }
-        .btn-edit:hover {
-            background-color: #fb8c00;
         }
         .btn-delete {
             background-color: #E53935;
         }
-        .btn-delete:hover {
-            background-color: #d32f2f;
+        .btn {
+            margin: 0 5px;
         }
-        .add-btn {
-            font-size: 24px;
-            padding: 10px;
-            background-color: #6200EA;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
+        .form-inline input, .form-inline select {
+            margin: 5px 0;
+        }
+        .form-inline button {
             margin-left: 10px;
-        }
-        .add-btn:hover {
-            background-color: #4e00b0;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Task Management System</h1>
-        <a href="create.php" class="add-btn">+</a>
-    </div>
-    
-    <form method="GET" action="">
-        <input type="text" name="search" value="<?php echo $search; ?>" placeholder="Search tasks...">
-        <select name="status_filter">
-            <option value="">All</option>
-            <option value="Pending" <?php echo $statusFilter == 'Pending' ? 'selected' : ''; ?>>Pending</option>
-            <option value="Completed" <?php echo $statusFilter == 'Completed' ? 'selected' : ''; ?>>Completed</option>
-        </select>
-        <button type="submit" class="btn">Search</button>
-    </form>
-    
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-        <?php if ($result->num_rows > 0): ?>
-            <?php while($row = $result->fetch_assoc()): ?>
+    <div class="container">
+        <div class="header">
+            <h1>Task Management System</h1>
+            <a href="create.php" class="add-btn">+</a>
+        </div>
+        
+        <form method="GET" action="" class="form-inline d-flex mb-3">
+            <input type="text" name="search" value="<?php echo $search; ?>" class="form-control" placeholder="Search tasks...">
+            <select name="status_filter" class="form-control">
+                <option value="">All</option>
+                <option value="Pending" <?php echo $statusFilter == 'Pending' ? 'selected' : ''; ?>>Pending</option>
+                <option value="Completed" <?php echo $statusFilter == 'Completed' ? 'selected' : ''; ?>>Completed</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        
+        <table class="table table-hover">
+            <thead>
                 <tr>
-                    <td><?php echo $row['id']; ?></td>
-                    <td><?php echo $row['title']; ?></td>
-                    <td><?php echo $row['description']; ?></td>
-                    <td>
-                        <form method="POST" action="">
-                            <input type="hidden" name="task_id" value="<?php echo $row['id']; ?>">
-                            <select name="new_status" onchange="this.form.submit()">
-                                <option value="Pending" <?php echo $row['status'] == 'Pending' ? 'selected' : ''; ?>>Pending</option>
-                                <option value="Completed" <?php echo $row['status'] == 'Completed' ? 'selected' : ''; ?>>Completed</option>
-                            </select>
-                        </form>
-                    </td>
-                    <td>
-                        <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn-edit">Edit</a>
-                        <a href="delete.php?id=<?php echo $row['id']; ?>" class="btn-delete">Delete</a>
-                    </td>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="5">No tasks found</td>
-            </tr>
-        <?php endif; ?>
-    </table>
+            </thead>
+            <tbody>
+                <?php if ($result->num_rows > 0): ?>
+                    <?php while($row = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo $row['id']; ?></td>
+                            <td><?php echo $row['title']; ?></td>
+                            <td><?php echo $row['description']; ?></td>
+                            <td>
+                                <form method="POST" action="" class="form-inline">
+                                    <input type="hidden" name="task_id" value="<?php echo $row['id']; ?>">
+                                    <select name="new_status" class="form-control" onchange="this.form.submit()">
+                                        <option value="Pending" <?php echo $row['status'] == 'Pending' ? 'selected' : ''; ?>>Pending</option>
+                                        <option value="Completed" <?php echo $row['status'] == 'Completed' ? 'selected' : ''; ?>>Completed</option>
+                                    </select>
+                                </form>
+                            </td>
+                            <td>
+                                <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-edit">Edit</a>
+                                <a href="delete.php?id=<?php echo $row['id']; ?>" class="btn btn-delete">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="5" class="text-center">No tasks found</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
